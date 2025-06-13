@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const user = await User.findOne({ email });
-console.log(User);
+    console.log(User);
 
     if (user) {
       return res
@@ -33,6 +34,44 @@ console.log(User);
     return res
       .status(500)
       .json({ success: false, message: "Failed To Create User" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User Not Exist" });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (!checkPassword) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Wrong credentials" });
+    }
+
+    const token = jwt.sign({ id: user._id }, "secretkeyofnoteapp123@#", {
+      expiresIn: "1h",
+    });
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        token,
+        user: { name: user.name },
+        message: "Login Successfully",
+      });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Failed To Login Server" });
   }
 });
 
