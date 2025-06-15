@@ -9,7 +9,6 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const user = await User.findOne({ email });
-    console.log(User);
 
     if (user) {
       return res
@@ -57,17 +56,15 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, "secretkeyofnoteapp123@#", {
-      expiresIn: "5h",
+      expiresIn: "1d",
     });
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        token,
-        user: { name: user.name },
-        message: "Login Successfully",
-      });
+    return res.status(200).json({
+      success: true,
+      token,
+      user: { name: user.name },
+      message: "Login Successfully",
+    });
   } catch (error) {
     return res
       .status(500)

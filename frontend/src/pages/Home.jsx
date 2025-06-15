@@ -35,7 +35,7 @@ const Home = () => {
 
   const editNote = async (id, title, description) => {
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         `http://localhost:5000/api/note/${id}`,
         {
           title,
