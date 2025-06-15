@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NoteModal = ({ closeModal }) => {
+const NoteModal = ({ closeModal, addNote }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const handleSubmit = async (e) => {
