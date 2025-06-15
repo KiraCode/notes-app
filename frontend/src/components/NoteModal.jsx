@@ -5,18 +5,7 @@ const NoteModal = ({ closeModal }) => {
   const [description, setDescription] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/api/note/add", {
-        title,
-        description,
-      });
-      if (response.data.success) {
-        navigate("/");
-        closeModal();
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    addNote(title, description);
   };
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
@@ -43,7 +32,9 @@ const NoteModal = ({ closeModal }) => {
             Add Note
           </button>
         </form>
-        <button className="mt-4 text-red-500" onClick={closeModal}>Cancel</button>
+        <button className="mt-4 text-red-500" onClick={closeModal}>
+          Cancel
+        </button>
       </div>
     </div>
   );
