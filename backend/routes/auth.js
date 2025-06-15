@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import middleWare from "../middleware/middleware.js";
 
 const router = express.Router();
 
@@ -72,4 +73,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/verify", middleWare, async (req, res) => {
+  return res.status(200).json({ success: true, user: req.user });
+});
 export default router;
