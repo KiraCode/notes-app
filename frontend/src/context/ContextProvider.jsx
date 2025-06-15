@@ -9,10 +9,22 @@ const ContextProvider = ({ children }) => {
     setUser(user);
   };
 
+   const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/verify");
+        const res = await axios.get("http://localhost:5000/api/auth/verify", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(res.data);
+
         if (res.data.success) {
           setUser(res.data.user);
         } else {
@@ -25,7 +37,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
