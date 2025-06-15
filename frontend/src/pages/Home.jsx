@@ -33,6 +33,26 @@ const Home = () => {
     setModalOpen(true);
   };
 
+  const deleteNote = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/note/${id}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.success) {
+        fetchNotes();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const editNote = async (id, title, description) => {
     try {
       const response = await axios.put(
@@ -48,7 +68,6 @@ const Home = () => {
           },
         }
       );
-      console.log(response.data);
 
       if (response.data.success) {
         closeModal();
@@ -74,7 +93,6 @@ const Home = () => {
           },
         }
       );
-      console.log(response.data);
 
       if (response.data.success) {
         closeModal();
@@ -89,7 +107,7 @@ const Home = () => {
       <Navbar />
       <div className="grid grid-cols-1 md:grid-cols-3 px-8 pt-4 gap-2">
         {notes.map((note) => (
-          <NoteCard note={note} onEdit={onEdit} />
+          <NoteCard note={note} onEdit={onEdit} deleteNote={deleteNote} />
         ))}
       </div>
       <button
