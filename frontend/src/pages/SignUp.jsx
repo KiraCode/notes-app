@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import "dotenv/config";
 
 const SignUp = () => {
   const [name, setName] = useState("");

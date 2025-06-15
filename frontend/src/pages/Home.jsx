@@ -15,6 +15,7 @@ const Home = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    setCurrentNote(null);
   };
 
   const fetchNotes = async () => {
