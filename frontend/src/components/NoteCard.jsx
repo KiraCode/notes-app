@@ -7,8 +7,8 @@ const NoteCard = ({ note, onEdit }) => {
       <h2 className="text-xl font-bold">{note.title}</h2>
       <p>{note.description}</p>
       <div className="flex justify-end mt-2">
-        <button className="text-blue-500 mr-2">
-          <FaEdit onClick={onEdit}/>
+        <button className="text-blue-500 mr-2" onClick={() => onEdit(note)}>
+          <FaEdit />
         </button>
         <button className="text-red-500">
           <FaTrash />

@@ -8,7 +8,7 @@ import NoteCard from "../components/NoteCard";
 const Home = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [notes, setNotes] = useState([]);
-  const [currentNote, setCurrentNote] = useState();
+  const [currentNote, setCurrentNote] = useState(null);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -31,6 +31,32 @@ const Home = () => {
   const onEdit = (note) => {
     setCurrentNote(note);
     setModalOpen(true);
+  };
+
+  const editNote = async (id, title, description) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/note/${id}`,
+        {
+          title,
+          description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+
+      if (response.data.success) {
+        closeModal();
+        fetchNotes();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const addNote = async (title, description) => {
@@ -77,6 +103,7 @@ const Home = () => {
           closeModal={closeModal}
           addNote={addNote}
           currentNote={currentNote}
+          editNote={editNote}
         />
       )}
     </div>
