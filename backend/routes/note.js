@@ -48,4 +48,15 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedNote = await Note.findByIdAndDelete(id);
+    return res.status(200).json({ success: true, updatedNote });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Can't Delete Notes" });
+  }
+});
 export default router;
