@@ -4,6 +4,7 @@ import NoteModal from "../components/NoteModal";
 import axios from "axios";
 import { useEffect } from "react";
 import NoteCard from "../components/NoteCard";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -24,7 +25,6 @@ const Home = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(data);
       setNotes(data.notes);
     } catch (error) {
       console.log(error);
@@ -44,6 +44,7 @@ const Home = () => {
       )
     );
   }, [query, notes]);
+
   const onEdit = (note) => {
     setCurrentNote(note);
     setModalOpen(true);
@@ -62,6 +63,7 @@ const Home = () => {
         }
       );
       if (response.data.success) {
+        toast.error("note deleted");
         fetchNotes();
       }
     } catch (error) {
@@ -87,6 +89,8 @@ const Home = () => {
 
       if (response.data.success) {
         closeModal();
+        toast.success("note updated successfully");
+        setCurrentNote(null);
         fetchNotes();
       }
     } catch (error) {
@@ -112,6 +116,7 @@ const Home = () => {
 
       if (response.data.success) {
         closeModal();
+        toast.success("note added successfully");
         fetchNotes();
       }
     } catch (error) {

@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
+import "dotenv/config";
 
 const connectToMongoDB = async () => {
-  try {
-    await mongoose.connect('mongodb://localhost:27017/notes_app');
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    console.log("Error Connecting to MongoDB", error.message);
-  }
+ mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => console.log("MongoDB connected successfully...😊"))
+    .catch((err) => console.log("Failed to connect MongoDB"));
 };
 
 export default connectToMongoDB;
