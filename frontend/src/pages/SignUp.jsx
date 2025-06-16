@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${import.meta.BACKEND_URL}/api/auth/register`,
         { name, email, password }
       );
       if (response.data.success) {
@@ -73,7 +75,10 @@ const SignUp = () => {
               Signup
             </button>
             <p className="text-center text-sm mt-2">
-              Already Have Account? <Link to="/login" className="text-blue-500">Login</Link>
+              Already Have Account?{" "}
+              <Link to="/login" className="text-blue-500">
+                Login
+              </Link>
             </p>
           </div>
         </form>

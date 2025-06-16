@@ -4,6 +4,7 @@ import NoteModal from "../components/NoteModal";
 import axios from "axios";
 import { useEffect } from "react";
 import NoteCard from "../components/NoteCard";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -14,17 +15,17 @@ const Home = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    setCurrentNote(null);
   };
 
   const fetchNotes = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/note", {
+      const { data } = await axios.get(`${import.meta.BACKEND_URL}/api/note`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
       });
-      console.log(data);
       setNotes(data.notes);
     } catch (error) {
       console.log(error);
@@ -44,6 +45,7 @@ const Home = () => {
       )
     );
   }, [query, notes]);
+
   const onEdit = (note) => {
     setCurrentNote(note);
     setModalOpen(true);
@@ -52,7 +54,7 @@ const Home = () => {
   const deleteNote = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/note/${id}`,
+        `${import.meta.BACKEND_URL}/api/note/${id}`,
 
         {
           headers: {
@@ -62,6 +64,7 @@ const Home = () => {
         }
       );
       if (response.data.success) {
+        toast.error("note deleted");
         fetchNotes();
       }
     } catch (error) {
@@ -72,7 +75,7 @@ const Home = () => {
   const editNote = async (id, title, description) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/note/${id}`,
+        `${import.meta.BACKEND_URL}/api/note/${id}`,
         {
           title,
           description,
@@ -87,6 +90,8 @@ const Home = () => {
 
       if (response.data.success) {
         closeModal();
+        toast.success("note updated successfully");
+        setCurrentNote(null);
         fetchNotes();
       }
     } catch (error) {
@@ -97,7 +102,7 @@ const Home = () => {
   const addNote = async (title, description) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/note/add",
+        `${import.meta.BACKEND_URL}/api/note/add`,
         {
           title,
           description,
@@ -112,6 +117,7 @@ const Home = () => {
 
       if (response.data.success) {
         closeModal();
+        toast.success("note added successfully");
         fetchNotes();
       }
     } catch (error) {
@@ -124,7 +130,12 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 px-8 pt-4 gap-2">
         {filterNotes.length > 0 ? (
           filterNotes.map((note) => (
-            <NoteCard note={note} onEdit={onEdit} deleteNote={deleteNote} />
+            <NoteCard
+              key={note.id}
+              note={note}
+              onEdit={onEdit}
+              deleteNote={deleteNote}
+            />
           ))
         ) : (
           <p>No Notes</p>
