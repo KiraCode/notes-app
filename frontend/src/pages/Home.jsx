@@ -20,7 +20,7 @@ const Home = () => {
 
   const fetchNotes = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.BACKEND_URL}/api/note`, {
+      const { data } = await axios.get(`${import.meta.env.BACKEND_URL}/api/note`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const Home = () => {
   const deleteNote = async (id) => {
     try {
       const response = await axios.delete(
-        `${import.meta.BACKEND_URL}/api/note/${id}`,
+        `${import.meta.env.BACKEND_URL}/api/note/${id}`,
 
         {
           headers: {
@@ -75,7 +75,7 @@ const Home = () => {
   const editNote = async (id, title, description) => {
     try {
       const response = await axios.put(
-        `${import.meta.BACKEND_URL}/api/note/${id}`,
+        `${import.meta.env.BACKEND_URL}/api/note/${id}`,
         {
           title,
           description,
@@ -102,7 +102,7 @@ const Home = () => {
   const addNote = async (title, description) => {
     try {
       const response = await axios.post(
-        `${import.meta.BACKEND_URL}/api/note/add`,
+        `${import.meta.env.BACKEND_URL}/api/note/add`,
         {
           title,
           description,
